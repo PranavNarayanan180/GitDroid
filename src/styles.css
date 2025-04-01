@@ -1,0 +1,229 @@
+/* Reset and Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #fff;
+  color: #000;
+  line-height: 1.5;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ensures footer is at the bottom if content is short */
+}
+
+.container {
+  max-width: 2800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  color: #000;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eee; /* subtle line */
+}
+
+.navbar .logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #666;
+}
+
+/* Hero Section */
+.hero-section {
+  background-color: #f5f5f5;
+  text-align: center;
+  padding: 6rem 2rem;
+  color: #000;
+  position: relative;
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.hero-section .cta-button {
+  padding: 1rem 2rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.hero-section .cta-button:hover {
+  background-color: #333;
+}
+
+/* Wave Container: Wraps the wave divider and the stats row */
+.wave-container {
+  position: relative;
+  margin-top: -80px; /* Adjust this value to control overall overlap */
+}
+
+/* Adjust the wave divider */
+.hero-divider {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-divider svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: scaleY(-1); /* Invert the wave vertically */
+}
+
+/* Position the stats row so it overlaps the wave */
+.wave-container .stats-row {
+  position: absolute;
+  top: 35px; /* Moved down 15px from the original 20px */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 3rem;
+  background: transparent;
+  padding: 1rem 2rem;
+}
+
+.stats-item {
+  text-align: center;
+}
+
+.stats-item h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.stats-item p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 4rem 1rem;
+  background-color: #fff;
+}
+
+.product-card {
+  background-color: #fff;
+  border-radius: 10px; /* Rounded corners */
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transform: translateY(-3px); /* Slight lift on hover */
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 5px; /* Slightly round the product image corners */
+}
+
+.product-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.product-card p {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+/* Footer */
+.footer {
+  background-color: #fff;
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid #ddd; /* subtle border to separate from main content */
+}
+
+.footer p {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  .hero-section p {
+    font-size: 1rem;
+  }
+}
+
+/* Button */
+.cta-button {
+  padding: 1rem 2rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border-radius: 30px; /* Make button rounder */
+  font-weight: 600;
+}
+
+.cta-button:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+

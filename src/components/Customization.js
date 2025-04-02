@@ -13,19 +13,23 @@ const Customization = () => {
     ],
     processor: [
       { id: 1, name: 'Snapdragon 888', price: 200, description: 'High performance chipset for intensive tasks.' },
-      { id: 2, name: 'Exynos 2100', price: 180, description: 'Efficient and powerful chipset for smooth performance.' }
+      { id: 2, name: 'Exynos 2100', price: 180, description: 'Efficient and powerful chipset for smooth performance.' },
+      { id: 3, name: 'Dimensity 9400', price: 150, description: 'Cost-effective processor with reliable performance.' }
     ],
     display: [
       { id: 1, name: '6.1" OLED', price: 100, description: 'Vivid colors and deep blacks with an OLED panel.' },
-      { id: 2, name: '6.7" AMOLED', price: 150, description: 'Larger AMOLED display with vibrant visuals.' }
+      { id: 2, name: '6.7" AMOLED', price: 150, description: 'Larger AMOLED display with vibrant visuals.' },
+      { id: 3, name: '6.2" LCD', price: 80, description: 'Energy-efficient LCD display with good viewing angles.' }
     ],
     ram: [
       { id: 1, name: '8GB RAM', price: 50, description: 'Standard memory configuration for everyday tasks.' },
-      { id: 2, name: '12GB RAM', price: 80, description: 'Extra memory for heavy multitasking and gaming.' }
+      { id: 2, name: '12GB RAM', price: 80, description: 'Extra memory for heavy multitasking and gaming.' },
+      { id: 3, name: '16GB RAM', price: 100, description: 'High-performance memory for intensive applications and gaming.' }
     ],
     rom: [
       { id: 1, name: '128GB Storage', price: 60, description: 'Ample storage space for apps, photos, and more.' },
-      { id: 2, name: '256GB Storage', price: 100, description: 'Large storage capacity for extensive media and files.' }
+      { id: 2, name: '256GB Storage', price: 100, description: 'Large storage capacity for extensive media and files.' },
+      { id: 3, name: '512GB Storage', price: 150, description: 'Massive storage space for extensive media library and applications.' }
     ]
   };
 
@@ -180,4 +184,6 @@ const Customization = () => {
 };
 
 export default Customization;
+
+
 

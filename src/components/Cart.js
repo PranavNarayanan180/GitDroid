@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
- 
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  
+  const [selectedItems, setSelectedItems] = useState(new Set());
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const navigate = useNavigate();
 
@@ -14,49 +12,75 @@ const Cart = () => {
     setCartItems(cart);
   }, []);
 
-  
-  const handleDoubleClick = (index) => {
-    setSelectedIndex(index);
+  const handleItemClick = (index) => {
+    setSelectedItems(prev => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(index)) {
+        newSelected.delete(index);
+      } else {
+        newSelected.add(index);
+      }
+      return newSelected;
+    });
   };
 
-  
   const toggleMenu = (index) => {
     setOpenMenuIndex(openMenuIndex === index ? null : index);
   };
 
- 
   const handleDelete = (index) => {
     const updatedCart = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-    
-    if (selectedIndex === index) {
-      setSelectedIndex(null);
-    } else if (selectedIndex > index) {
-      setSelectedIndex(selectedIndex - 1);
-    }
+    setSelectedItems(prev => {
+      const newSelected = new Set(prev);
+      newSelected.delete(index);
+     
+      const updatedSelected = new Set();
+      newSelected.forEach(selectedIndex => {
+        if (selectedIndex < index) {
+          updatedSelected.add(selectedIndex);
+        } else if (selectedIndex > index) {
+          updatedSelected.add(selectedIndex - 1);
+        }
+      });
+      return updatedSelected;
+    });
     setOpenMenuIndex(null);
   };
 
-  
   const handleEdit = (index) => {
     navigate('/customize', { state: { editingItem: cartItems[index] } });
     setOpenMenuIndex(null);
   };
 
-  
   const handlePayment = () => {
-    if (selectedIndex === null) {
-      alert('Please double-click an item to select it for payment.');
+    if (selectedItems.size === 0) {
+      alert('Please select at least one item for checkout.');
       return;
     }
-    navigate('/checkout', { state: { selectedPhone: cartItems[selectedIndex] } });
+    const selectedPhones = Array.from(selectedItems).map(index => cartItems[index]);
+    navigate('/checkout', { state: { selectedPhones } });
   };
 
   const handleClearCart = () => {
     setCartItems([]);
-    setSelectedIndex(null);
+    setSelectedItems(new Set());
     localStorage.removeItem('cart');
+  };
+
+  const calculateTotalPrice = () => {
+    return Array.from(selectedItems).reduce((total, index) => {
+      return total + cartItems[index].totalPrice;
+    }, 0);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.size === cartItems.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(cartItems.map((_, index) => index)));
+    }
   };
 
   return (
@@ -66,13 +90,44 @@ const Cart = () => {
       margin: '0 auto',
       backgroundColor: '#f5f5f5'
     }}>
-      <h2 style={{
-        fontSize: '2rem',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        marginBottom: '2rem',
-        textAlign: 'center'
-      }}>YOUR CART</h2>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '2rem'
+      }}>
+        <h2 style={{
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          margin: 0
+        }}>YOUR CART</h2>
+        {cartItems.length > 0 && (
+          <button
+            onClick={handleSelectAll}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#fff',
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              color: '#666',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={e => {
+              e.target.style.backgroundColor = '#f5f5f5';
+              e.target.style.borderColor = '#666';
+            }}
+            onMouseLeave={e => {
+              e.target.style.backgroundColor = '#fff';
+              e.target.style.borderColor = '#e0e0e0';
+            }}
+          >
+            {selectedItems.size === cartItems.length ? 'Unselect All' : 'Select All'}
+          </button>
+        )}
+      </div>
 
       {cartItems.length === 0 ? (
         <div style={{
@@ -95,7 +150,7 @@ const Cart = () => {
             {cartItems.map((item, index) => (
               <div
                 key={index}
-                onDoubleClick={() => handleDoubleClick(index)}
+                onClick={() => handleItemClick(index)}
                 style={{
                   position: 'relative',
                   cursor: 'pointer',
@@ -110,7 +165,7 @@ const Cart = () => {
                   maxWidth: '800px',
                   margin: '0 auto',
                   gap: '2rem',
-                  border: selectedIndex === index ? '2px solid #000' : '1px solid #e0e0e0',
+                  border: selectedItems.has(index) ? '2px solid #2c3e50' : '1px solid #e0e0e0',
                   transition: 'all 0.3s ease'
                 }}
               >
@@ -175,7 +230,10 @@ const Cart = () => {
                           background: 'transparent',
                           cursor: 'pointer'
                         }}
-                        onClick={() => handleEdit(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit(index);
+                        }}
                       >
                         Edit
                       </button>
@@ -188,7 +246,10 @@ const Cart = () => {
                           cursor: 'pointer',
                           color: '#ff4444'
                         }}
-                        onClick={() => handleDelete(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(index);
+                        }}
                       >
                         Delete
                       </button>
@@ -264,7 +325,11 @@ const Cart = () => {
           <div style={{
             textAlign: 'center',
             marginTop: '2rem',
-            padding: '1rem'
+            padding: '1rem',
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
             <button
               onClick={handleClearCart}
@@ -288,6 +353,37 @@ const Cart = () => {
               }}
             >
               Clear Cart
+            </button>
+            <button
+              onClick={handlePayment}
+              style={{
+                padding: '0.8rem 2rem',
+                backgroundColor: selectedItems.size > 0 ? '#2c3e50' : '#95a5a6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: selectedItems.size > 0 ? 'pointer' : 'not-allowed',
+                fontSize: '1rem',
+                fontWeight: '500',
+                transition: 'all 0.3s ease',
+                opacity: selectedItems.size > 0 ? 1 : 0.7
+              }}
+              onMouseEnter={e => {
+                if (selectedItems.size > 0) {
+                  e.target.style.backgroundColor = '#34495e';
+                  e.target.style.transform = 'translateY(-2px)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (selectedItems.size > 0) {
+                  e.target.style.backgroundColor = '#2c3e50';
+                  e.target.style.transform = 'translateY(0)';
+                }
+              }}
+            >
+              {selectedItems.size > 0
+                ? `Proceed to Checkout ($${calculateTotalPrice()})`
+                : 'Checkout'}
             </button>
           </div>
         </>

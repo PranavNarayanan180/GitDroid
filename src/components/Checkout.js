@@ -407,7 +407,7 @@ const Checkout = () => {
           <div style={{
             marginTop: '2rem',
             padding: '1rem',
-            backgroundColor: '#2c3e50',
+            backgroundColor: '#000000',
             color: '#fff',
             borderRadius: '8px',
             display: 'flex',
@@ -661,7 +661,7 @@ const Checkout = () => {
               style={{
                 width: '100%',
                 padding: '1rem',
-                backgroundColor: '#2c3e50',
+                backgroundColor: '#000000',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
@@ -671,11 +671,11 @@ const Checkout = () => {
                 transition: 'all 0.3s ease'
               }}
               onMouseEnter={e => {
-                e.target.style.backgroundColor = '#34495e';
+                e.target.style.backgroundColor = '#333333';
                 e.target.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={e => {
-                e.target.style.backgroundColor = '#2c3e50';
+                e.target.style.backgroundColor = '#000000';
                 e.target.style.transform = 'translateY(0)';
               }}
             >
@@ -689,4 +689,6 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+
 

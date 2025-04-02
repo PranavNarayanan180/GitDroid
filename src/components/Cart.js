@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
-  // Selected index for order placement (via double-click)
+ 
   const [selectedIndex, setSelectedIndex] = useState(null);
-  // Which card's 3-dot menu is open (store index, or null if none)
+  
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const navigate = useNavigate();
 
@@ -14,22 +14,22 @@ const Cart = () => {
     setCartItems(cart);
   }, []);
 
-  // Handle double-click on card: mark as selected (place order) and highlight green.
+  
   const handleDoubleClick = (index) => {
     setSelectedIndex(index);
   };
 
-  // Handle three-dot menu toggle.
+  
   const toggleMenu = (index) => {
     setOpenMenuIndex(openMenuIndex === index ? null : index);
   };
 
-  // Handle deletion of an item.
+ 
   const handleDelete = (index) => {
     const updatedCart = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-    // Reset selection if needed.
+    
     if (selectedIndex === index) {
       setSelectedIndex(null);
     } else if (selectedIndex > index) {
@@ -38,13 +38,13 @@ const Cart = () => {
     setOpenMenuIndex(null);
   };
 
-  // Handle edit: navigate to Customization page with the selected item for editing.
+  
   const handleEdit = (index) => {
     navigate('/customize', { state: { editingItem: cartItems[index] } });
     setOpenMenuIndex(null);
   };
 
-  // Handle Payment: navigate to Checkout with the selected phone configuration.
+  
   const handlePayment = () => {
     if (selectedIndex === null) {
       alert('Please double-click an item to select it for payment.');
@@ -53,64 +53,125 @@ const Cart = () => {
     navigate('/checkout', { state: { selectedPhone: cartItems[selectedIndex] } });
   };
 
+  const handleClearCart = () => {
+    setCartItems([]);
+    setSelectedIndex(null);
+    localStorage.removeItem('cart');
+  };
+
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <h2>Your Cart</h2>
+    <div style={{ 
+      padding: '2rem',
+      maxWidth: '1200px', 
+      margin: '0 auto',
+      backgroundColor: '#f5f5f5'
+    }}>
+      <h2 style={{
+        fontSize: '2rem',
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        marginBottom: '2rem',
+        textAlign: 'center'
+      }}>YOUR CART</h2>
+
       {cartItems.length === 0 ? (
-        <p>No items in cart</p>
+        <div style={{
+          backgroundColor: '#fff',
+          padding: '2rem',
+          borderRadius: '10px',
+          textAlign: 'center',
+          marginTop: '2rem'
+        }}>
+          <p>No shipment to track, place order to track your shipment.....</p>
+        </div>
       ) : (
         <>
-          {cartItems.map((item, index) => (
-            <div
-              key={index}
-              onDoubleClick={() => handleDoubleClick(index)}
-              style={{
-                position: 'relative',
-                border: selectedIndex === index ? '2px solid green' : '1px solid #ccc',
-                borderRadius: '10px',
-                padding: '1rem',
-                marginBottom: '1rem',
-                cursor: 'pointer',
-                backgroundColor: selectedIndex === index ? '#e0ffe0' : '#fff',
-                transition: 'background-color 0.3s ease, border 0.3s ease'
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <h3>Customized Phone</h3>
-                <div>
-                  <span
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            marginTop: '2rem'
+          }}>
+            {cartItems.map((item, index) => (
+              <div
+                key={index}
+                onDoubleClick={() => handleDoubleClick(index)}
+                style={{
+                  position: 'relative',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: '#fff',
+                  padding: '1.5rem',
+                  borderRadius: '15px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                  width: '100%',
+                  maxWidth: '800px',
+                  margin: '0 auto',
+                  gap: '2rem',
+                  border: selectedIndex === index ? '2px solid #000' : '1px solid #e0e0e0',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <div style={{
+                  width: '250px',
+                  height: '250px',
+                  flexShrink: 0,
+                  borderRadius: '50%',
+                  backgroundColor: '#e0e0e0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative'
+                }}>
+                  <div style={{
+                    textAlign: 'center',
+                    color: '#666',
+                    fontSize: '1.1rem'
+                  }}>
+                    Picture of<br />the phone
+                  </div>
+                  <div
                     style={{
-                      fontSize: '1.5rem',
-                      cursor: 'pointer',
-                      userSelect: 'none'
+                      position: 'absolute',
+                      bottom: '20px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      backgroundColor: '#fff',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '15px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                      cursor: 'pointer'
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleMenu(index);
                     }}
                   >
-                    ⋮
-                  </span>
+                    <span style={{ transform: 'rotate(90deg)', display: 'inline-block' }}>⋮</span>
+                  </div>
                   {openMenuIndex === index && (
                     <div
                       style={{
                         position: 'absolute',
-                        right: '10px',
-                        top: '30px',
+                        bottom: '-60px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
                         background: '#fff',
-                        border: '1px solid #ccc',
-                        borderRadius: '5px',
-                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                        zIndex: 10
+                        borderRadius: '8px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                        zIndex: 10,
+                        width: '120px'
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
                         style={{
-                          display: 'block',
-                          padding: '0.5rem 1rem',
                           width: '100%',
+                          padding: '0.5rem',
                           border: 'none',
+                          borderBottom: '1px solid #eee',
                           background: 'transparent',
                           cursor: 'pointer'
                         }}
@@ -120,12 +181,12 @@ const Cart = () => {
                       </button>
                       <button
                         style={{
-                          display: 'block',
-                          padding: '0.5rem 1rem',
                           width: '100%',
+                          padding: '0.5rem',
                           border: 'none',
                           background: 'transparent',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          color: '#ff4444'
                         }}
                         onClick={() => handleDelete(index)}
                       >
@@ -134,50 +195,99 @@ const Cart = () => {
                     </div>
                   )}
                 </div>
+                <div style={{
+                  flex: 1,
+                  backgroundColor: '#fff',
+                  padding: '1rem',
+                  borderRadius: '10px'
+                }}>
+                  <h3 style={{
+                    margin: '0 0 1rem 0',
+                    color: '#2c3e50',
+                    fontSize: '1.4rem',
+                    borderBottom: '2px solid #f0f0f0',
+                    paddingBottom: '0.5rem'
+                  }}>Hardware Specifications</h3>
+                  
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gap: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <p style={{ margin: 0, color: '#666' }}>
+                      <strong style={{ color: '#2c3e50', minWidth: '100px', display: 'inline-block' }}>📸 Camera:</strong> 
+                      {item.camera.name}
+                    </p>
+                    <p style={{ margin: 0, color: '#666' }}>
+                      <strong style={{ color: '#2c3e50', minWidth: '100px', display: 'inline-block' }}>🔧 Processor:</strong> 
+                      {item.processor.name}
+                    </p>
+                    <p style={{ margin: 0, color: '#666' }}>
+                      <strong style={{ color: '#2c3e50', minWidth: '100px', display: 'inline-block' }}>📱 Display:</strong> 
+                      {item.display.name}
+                    </p>
+                    <p style={{ margin: 0, color: '#666' }}>
+                      <strong style={{ color: '#2c3e50', minWidth: '100px', display: 'inline-block' }}>💾 RAM:</strong> 
+                      {item.ram.name}
+                    </p>
+                    <p style={{ margin: 0, color: '#666', gridColumn: '1 / -1' }}>
+                      <strong style={{ color: '#2c3e50', minWidth: '100px', display: 'inline-block' }}>💽 Storage:</strong> 
+                      {item.rom.name}
+                    </p>
+                  </div>
+
+                  <div style={{
+                    marginTop: '1rem',
+                    padding: '1rem',
+                    backgroundColor: '#2c3e50',
+                    color: '#fff',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span style={{ 
+                      fontSize: '1.1rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>Total Price</span>
+                    <span style={{ 
+                      fontSize: '1.4rem',
+                      fontWeight: 'bold'
+                    }}>${item.totalPrice}</span>
+                  </div>
+                </div>
               </div>
-              <p>
-                <strong>Camera:</strong> {item.camera.name}
-              </p>
-              <p>
-                <strong>Processor:</strong> {item.processor.name}
-              </p>
-              <p>
-                <strong>Display:</strong> {item.display.name}
-              </p>
-              <p>
-                <strong>RAM:</strong> {item.ram.name}
-              </p>
-              <p>
-                <strong>ROM:</strong> {item.rom.name}
-              </p>
-              <p>
-                <strong>Total Price:</strong> ${item.totalPrice}
-              </p>
-            </div>
-          ))}
-          {/* Payment Button with Total Amount of Selected Item */}
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            ))}
+          </div>
+          <div style={{
+            textAlign: 'center',
+            marginTop: '2rem',
+            padding: '1rem'
+          }}>
             <button
+              onClick={handleClearCart}
               style={{
-                padding: '1rem 2rem',
-                backgroundColor: '#28a745', // green color
-                color: '#fff',
-                border: 'none',
-                borderRadius: '30px',
+                padding: '0.8rem 2rem',
+                backgroundColor: '#fff',
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
                 cursor: 'pointer',
-                fontSize: '1.1rem',
-                fontWeight: '600',
-                textTransform: 'uppercase',
-                transition: 'background-color 0.3s ease, transform 0.3s ease'
+                fontSize: '1rem',
+                color: '#666',
+                transition: 'all 0.3s ease'
               }}
-              onClick={handlePayment}
-              onDoubleClick={handlePayment} // allow double-click also
-              onMouseEnter={e => (e.target.style.transform = 'scale(1.05)')}
-              onMouseLeave={e => (e.target.style.transform = 'scale(1)')}
+              onMouseEnter={e => {
+                e.target.style.backgroundColor = '#f5f5f5';
+                e.target.style.borderColor = '#666';
+              }}
+              onMouseLeave={e => {
+                e.target.style.backgroundColor = '#fff';
+                e.target.style.borderColor = '#e0e0e0';
+              }}
             >
-              {selectedIndex !== null
-                ? `Pay $${cartItems[selectedIndex].totalPrice}`
-                : 'Select a phone & Pay'}
+              Clear Cart
             </button>
           </div>
         </>

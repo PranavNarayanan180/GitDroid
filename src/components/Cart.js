@@ -301,7 +301,7 @@ const Cart = () => {
                   <div style={{
                     marginTop: '1rem',
                     padding: '1rem',
-                    backgroundColor: '#2c3e50',
+                    backgroundColor: '#000000',
                     color: '#fff',
                     borderRadius: '8px',
                     display: 'flex',
@@ -358,7 +358,7 @@ const Cart = () => {
               onClick={handlePayment}
               style={{
                 padding: '0.8rem 2rem',
-                backgroundColor: selectedItems.size > 0 ? '#2c3e50' : '#95a5a6',
+                backgroundColor: selectedItems.size > 0 ? '#000000' : '#95a5a6',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
@@ -370,20 +370,20 @@ const Cart = () => {
               }}
               onMouseEnter={e => {
                 if (selectedItems.size > 0) {
-                  e.target.style.backgroundColor = '#34495e';
+                  e.target.style.backgroundColor = '#333333';
                   e.target.style.transform = 'translateY(-2px)';
                 }
               }}
               onMouseLeave={e => {
                 if (selectedItems.size > 0) {
-                  e.target.style.backgroundColor = '#2c3e50';
+                  e.target.style.backgroundColor = '#000000';
                   e.target.style.transform = 'translateY(0)';
                 }
               }}
             >
               {selectedItems.size > 0
                 ? `Proceed to Checkout ($${calculateTotalPrice()})`
-                : 'Checkout'}
+                : 'Select items to Checkout'}
             </button>
           </div>
         </>
